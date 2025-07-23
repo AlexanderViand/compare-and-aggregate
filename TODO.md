@@ -27,12 +27,16 @@ Generic applications (with a CA-focus):
 
 ## Tasks
 1. See if the ezPC/mpc-gpu/fss stuff actually works
+   It **seems to run**, but it's not very convenient / does not give great output
 1. Are there any other GPU MPC libraries we should consider and/or benchmark?
-1. Add ASS to ezPc/mpc-gpu (hopefully with loits of AI coding help)
+   Piranha (a few MPC primitives, but no FSS)
+   CryptGPU (CrypTen for GPU) - only supports RSS
+   Spin (?) - details not quite clear, but no FSS anyway
+1. Add LSS API to ezPc/mpc-gpu (hopefully with loits of AI coding help)
     * Already has beaver triple generation/etc in the various FSS things, probably just needs to be wrapped in a nice API
     * How easy would it be to re-use existing matmul/etc code for ASS as well? --> They already use just that!
     * Implement A2B/B2A and basic binary comparison/etc logic
-    * Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)
+    * ~~Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)~~g
       -> implies implementing comparisons, too
     * Does the GPU-FSS version have DCF? ~~If not, port their CPU FSS DCF to GPU FSS code~~
       It actually does, it's in /dcf/gpu_dcf.cu
