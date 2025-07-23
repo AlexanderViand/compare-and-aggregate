@@ -26,14 +26,17 @@ Generic applications (with a CA-focus):
 
 
 ## Tasks
+0. share up-to-date paper and CA imnplementation
 1. See if the ezPC/mpc-gpu/fss stuff actually works
-   It **seems to run**, but it's not very convenient / does not give great output
+   It **runs** but it's not very convenient / ~~does not give great output~~
 1. Are there any other GPU MPC libraries we should consider and/or benchmark?
    Piranha (a few MPC primitives, but no FSS)
    CryptGPU (CrypTen for GPU) - only supports RSS
    Spin (?) - details not quite clear, but no FSS anyway
 1. Add LSS API to ezPc/mpc-gpu (hopefully with loits of AI coding help)
     * Already has beaver triple generation/etc in the various FSS things, probably just needs to be wrapped in a nice API
+    * Maybe use a polynomial-replaced-activation function net like CryptoNets
+    * Same, we can use a binary net for the A2B/B2A and binary API testing
     * How easy would it be to re-use existing matmul/etc code for LSS as well? --> They already use just that!
     * Implement A2B/B2A and basic binary comparison/etc logic
     * ~~Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)~~
@@ -67,9 +70,18 @@ Generic applications (with a CA-focus):
 * re-implement a bunch of sota FSS-based things (PIR, ML, etc) that were originally hand-written for CPU,
   showing that both (i) it takes very little effort (a few hundred LoC per paper) to implement them using the compiler
   and (ii) because of the automagic GPU acceleration, the sota is now much faster
-*  
+* Baseline: also support EzPC CPU backend in our compiler, to allow showing compiler speedup vs CPU speedup
+* compare against other non-FSS-enabled MPC compilers (on CPU)
+* Lower the effort to switch from CPU to GPU
 
 
 # Non-Goals
 1. 3 PC  or 3+ PC settings
 2. distributed key generation
+
+Why do we need GPU backend?
+--> On GPU, we can use FSS in more things!
+Write once, SIGMA already demonstrates
+NETWORK COST MODEL!!!
+
+If we do AI models, we don't expect to beat SIGMA/etc at their own models, but we can enable the same stuff and reoptimization for any model!
