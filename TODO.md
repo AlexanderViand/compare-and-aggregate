@@ -36,7 +36,7 @@ Generic applications (with a CA-focus):
     * Already has beaver triple generation/etc in the various FSS things, probably just needs to be wrapped in a nice API
     * How easy would it be to re-use existing matmul/etc code for ASS as well? --> They already use just that!
     * Implement A2B/B2A and basic binary comparison/etc logic
-    * ~~Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)~~g
+    * ~~Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)~~
       -> implies implementing comparisons, too
     * Does the GPU-FSS version have DCF? ~~If not, port their CPU FSS DCF to GPU FSS code~~
       It actually does, it's in /dcf/gpu_dcf.cu
