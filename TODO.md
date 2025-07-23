@@ -1,5 +1,30 @@
 # Building a GPU-enabled FSS/ArithSS switching compiler
 
+## Motivation
+
+Popular generic MPC compilers and runtimes (e.g., MP‑SPDZ, SCALE‑MAMBA, Sharemind, ABY/ABY3) stil rely primarily on additive, Boolean, or GC shares. 
+They can call external FSS-based sub‑routines (e.g., for PIR), but the compiler does not reason about FSS or generate FSS keys natively.
+
+FSS trades off excellent (online) communication with increased computation, and is therefore more compute-bound than tradiional MPC techniques.
+As a result, it benefits massively from GPU acceleration, as demonstrated by recent secure Transformer inference works such as Orca/Sigma, which
+implement FSS-based MPC on GPU to great effect. 
+However, no MPC compilers support GPU backends, and even the few GPU-enabled frameworks have very limited features compared to their CPU versions. 
+
+Beyond the very limited implementation for the CCS'24 paper, there is no work exploiting the (additive) "aggregability" of FSS-based MPC,
+which should give significant improvements to a range of applications beyond just simple sorting.
+In addition to the CCS'24 paper, there are also a variety of other FSS (manual) "optimization" papers, e.g.,
+work on reducing operations that would naively consume multiple DCF calls into single DCF calls 
+(Used for ReLU/any pieceswise linear function in Eurocrypt'21, Boyle et al., w/ Mayank).
+Beyond this, there is a range of key-size reduction optimizations in the literature that could be targets for formalization into optimization patterns.
+
+Note: For AI workloads, most of the MPC-adaption work can be done once, in the form of expert-written kernels for a handful of key operators (e.g., matmul, GELU, etc),
+but this is not the case for more generic programs (e.g., custom auctions, etc.)
+
+Generic applications (with a CA-focus):
+* Auctions (k-price auction is directly a ranking problem)
+* Graph Problems (shortest path, etc) also tend to involve a lot of sorting
+
+
 ## Tasks
 1. See if the ezPC/mpc-gpu/fss stuff actually works
 1. Are there any other GPU MPC libraries we should consider and/or benchmark?
@@ -9,7 +34,8 @@
     * Implement A2B/B2A and basic binary comparison/etc logic
     * Implement whatever SOTA for non-FSS based sorting is (some kind of modified quicksort?)
       -> implies implementing comparisons, too
-    * Does the GPU-FSS version have DCF? NO: **port their CPU FSS DCF to GPU FSS code**
+    * Does the GPU-FSS version have DCF? ~~If not, port their CPU FSS DCF to GPU FSS code~~
+      It actually does, it's in /dcf/gpu_dcf.cu
     * Re-implementing Compare-and-Aggregate CCS'24 sorting magic
 
 1. Benchmarking for cost model
@@ -31,7 +57,15 @@
 1. **LUTs**?
 1. "THE" MPC compiler for the (GPU, FSS, etc using) Future
 
+## Contributions
+* Additive Aggregation paradigm (generalization of CA), and show that it significantly speeds up several classes of applications
+* reduce amount of custom optimizations required
+* re-implement a bunch of sota FSS-based things (PIR, ML, etc) that were originally hand-written for CPU,
+  showing that both (i) it takes very little effort (a few hundred LoC per paper) to implement them using the compiler
+  and (ii) because of the automagic GPU acceleration, the sota is now much faster
+*  
+
 
 # Non-Goals
-1. 3 PC settings
+1. 3 PC  or 3+ PC settings
 2. distributed key generation
