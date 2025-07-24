@@ -43,7 +43,35 @@ Generic applications (with a CA-focus):
       -> implies implementing comparisons, too
     * Does the GPU-FSS version have DCF? ~~If not, port their CPU FSS DCF to GPU FSS code~~
       It actually does, it's in /dcf/gpu_dcf.cu
-    * Re-implementing Compare-and-Aggregate CCS'24 sorting magic
+    * Re-implementing Compare-and-Aggregate CCS'24 sorting magic (both for CPU and GPU!)
+      Main challenge: key gen?
+    * Figure out if we can run EzPC GPU in a more "continous" mode, with continously running offline party/key gen
+      (it seems like we'd need this to take advantage of the u, 2u, 3u, ...,ku + n clique keygen optimization from the paper)
+
+1. Extend ONNXBridge to support Transformer models and/or find some alternative?
+    * The current ONNX Bridge only supports basic operations: 
+      * Relu
+      * LeakyRelu
+      * Softmax
+      * Conv
+      * MaxPool
+      * AveragePool
+      * Flatten
+      * Gemm
+      * BatchNormalization
+      * Concat
+      * GlobalAveragePool
+      * Add
+      * ConvTranspose
+      * Transpose
+    * GPU-MPC needs these transformer-specific operations that aren't in ONNX Bridge:
+      * Multi-Head Attention (MHA) - gpu_mha.cu/h
+      * Layer Normalization - gpu_layernorm.cu/h
+      * GELU activation - gpu_gelu.cu/h
+      * SiLU activation - used in LLaMA
+      * RMS Normalization - used in LLaMA
+      * Rotary Embeddings - positional encoding
+      * Attention masking - causal/self-attention
 
 1. Benchmarking for cost model
     * Share conversions
